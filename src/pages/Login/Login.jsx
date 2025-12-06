@@ -6,7 +6,7 @@ import { api } from "../../apis/api";
 import toast from "react-hot-toast";
 import { setUser } from "../../store/slices/userSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Login = () => {
   // State
@@ -89,6 +89,14 @@ export const Login = () => {
             name="password"
             ref={passwordRef}
           />
+        </Form.Group>
+
+        <Form.Group className="mb-4">
+          <Link to="/register">Don't have an account? Register</Link>
+        </Form.Group>
+        
+        <Form.Group className="mb-4">
+          <Link to="/forgot-password">Forgot Password</Link>
         </Form.Group>
 
         <Button type="submit" variant="outline-primary">
