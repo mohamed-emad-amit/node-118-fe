@@ -1,12 +1,20 @@
 import { useRef, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { api } from "../../apis/api";
+import toast from "react-hot-toast";
+import { Loading } from "../../components/Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 // EndPoint => accept email and password
 
 export const Register = () => {
   // State
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Navigation
+  const go = useNavigate();
 
   // Refs
   const emailRef = useRef();
@@ -16,6 +24,8 @@ export const Register = () => {
   async function handleRegister(ev) {
     ev.preventDefault();
 
+    setLoading(true);
+
     try {
       // Data
       const data = {
@@ -24,8 +34,28 @@ export const Register = () => {
       };
       // [TODO]: Not Implement Yet
       // Call EndPoint
+      const response = await api.post("/api/v1/auth/register", data);
+      toast.success(response.data.message);
+
+      // Redirect Verify Email
+      go("/verify-otp");
     } catch (error) {
-      console.log(error);
+      // Handle Error Messages []
+      if (error.response?.data?.messages) {
+        error.response?.data?.messages.forEach((message) => {
+          toast.error(message);
+        });
+      }
+      // Handle Error Message
+      else if (error.response?.data?.message) {
+        toast.error(error.response?.data?.message);
+      }
+      // Default Message
+      else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -33,6 +63,9 @@ export const Register = () => {
     setShowPassword((prev) => !prev);
   }
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <>
       <h1>Register</h1>
