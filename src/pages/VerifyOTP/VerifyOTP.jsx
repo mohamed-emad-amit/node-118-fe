@@ -51,6 +51,8 @@ export const VerifyOTP = () => {
       // Store User Data
       dispatch(setUser(response.data.user));
 
+      toast.success(response.data.message);
+
       // Redirect Home
       go("/");
     } catch (error) {

@@ -10,6 +10,8 @@ import { errorHandler } from "./utils/errorHandler";
 import { api } from "./apis/api";
 import { setUser } from "./store/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { ForgotPassword } from "./pages/ForgotPassword/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword/ResetPassword";
 
 export default function App() {
   const { isLoggedIn } = useSelector((state) => state.user);
@@ -64,6 +66,10 @@ export default function App() {
 
               {/* OTP Routes */}
               <Route path="/verify-otp" Component={VerifyOTP} />
+
+              {/* Password Routes */}
+              <Route path="/forgot-password" Component={ForgotPassword} />
+              <Route path="/reset-password/:token" Component={ResetPassword} />
             </>
           )}
         </Routes>
