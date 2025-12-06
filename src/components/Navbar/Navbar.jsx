@@ -1,7 +1,26 @@
-import { Navbar as BNavbar, Container, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Navbar as BNavbar, Button, Container, Nav } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { clearUser } from "../../store/slices/userSlice";
 
 export const Navbar = () => {
+  // Get User Logged Or Not
+  const { isLoggedIn } = useSelector((state) => state.user);
+
+  // Global Hooks
+  const dispatch = useDispatch();
+  const go = useNavigate();
+
+  // Handlers
+  function handleLogout() {
+    // Reset User Data
+    dispatch(clearUser());
+    // Clear Session
+    localStorage.removeItem("token");
+    // Redirect Login
+    go("/login");
+  }
+
   return (
     <BNavbar expand="md" bg="dark" data-bs-theme="dark">
       <Container>
@@ -16,12 +35,25 @@ export const Navbar = () => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/login">
-              Login
-            </Nav.Link>
-            <Nav.Link as={Link} to="/register">
-              Register
-            </Nav.Link>
+
+            {/* Hide Auth */}
+            {!isLoggedIn && (
+              <>
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+                <Nav.Link as={Link} to="/register">
+                  Register
+                </Nav.Link>
+              </>
+            )}
+
+            {/* Show Logout */}
+            {isLoggedIn && (
+              <Button variant="outline-danger" onClick={handleLogout}>
+                Logout
+              </Button>
+            )}
           </Nav>
         </BNavbar.Collapse>
       </Container>

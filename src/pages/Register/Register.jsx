@@ -5,6 +5,7 @@ import { api } from "../../apis/api";
 import toast from "react-hot-toast";
 import { Loading } from "../../components/Loading/Loading";
 import { useNavigate } from "react-router-dom";
+import { errorHandler } from "../../utils/errorHandler";
 
 // EndPoint => accept email and password
 
@@ -32,28 +33,18 @@ export const Register = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
-      // [TODO]: Not Implement Yet
       // Call EndPoint
       const response = await api.post("/api/v1/auth/register", data);
       toast.success(response.data.message);
 
+      // Save Email LocalStorage
+      localStorage.setItem("email", data.email);
+
       // Redirect Verify Email
       go("/verify-otp");
     } catch (error) {
-      // Handle Error Messages []
-      if (error.response?.data?.messages) {
-        error.response?.data?.messages.forEach((message) => {
-          toast.error(message);
-        });
-      }
-      // Handle Error Message
-      else if (error.response?.data?.message) {
-        toast.error(error.response?.data?.message);
-      }
-      // Default Message
-      else {
-        toast.error("Something went wrong");
-      }
+      // Handle Error
+      errorHandler(error);
     } finally {
       setLoading(false);
     }

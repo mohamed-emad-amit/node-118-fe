@@ -5,8 +5,47 @@ import { Register } from "./pages/Register/Register";
 import { Container } from "react-bootstrap";
 import { Toaster } from "react-hot-toast";
 import { VerifyOTP } from "./pages/VerifyOTP/VerifyOTP";
+import { useEffect } from "react";
+import { errorHandler } from "./utils/errorHandler";
+import { api } from "./apis/api";
+import { setUser } from "./store/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function App() {
+  const { isLoggedIn } = useSelector((state) => state.user);
+
+  // Global Dispatch
+  const dispatch = useDispatch();
+
+  // Get Token
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    // Check User Has Token Or Not "Still Logged?"
+    async function validateToken() {
+      if (token) {
+        try {
+          const response = await api.get("/api/v1/auth/me", {
+            // Hint: back -> authorization
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const user = response.data;
+          // Store User Data [LocalStrage - Redux]
+          dispatch(setUser(user));
+        } catch (error) {
+          errorHandler(error);
+          // Clear Token
+          localStorage.removeItem("token");
+        }
+      }
+    }
+
+    validateToken();
+  }, [dispatch, token]);
+
   return (
     <div>
       {/* Global Navbar */}
@@ -17,12 +56,16 @@ export default function App() {
       {/* Routes */}
       <Container className="my-3 py-3">
         <Routes>
-          {/* Auth Routes */}
-          <Route path="/login" Component={Login} />
-          <Route path="/register" Component={Register} />
+          {!isLoggedIn && (
+            <>
+              {/* Auth Routes */}
+              <Route path="/login" Component={Login} />
+              <Route path="/register" Component={Register} />
 
-          {/* OTP Routes */}
-          <Route path="/verify-otp" Component={VerifyOTP} />
+              {/* OTP Routes */}
+              <Route path="/verify-otp" Component={VerifyOTP} />
+            </>
+          )}
         </Routes>
       </Container>
     </div>
