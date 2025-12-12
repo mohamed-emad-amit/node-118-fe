@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ForgotPassword } from "./pages/ForgotPassword/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword/ResetPassword";
 import { Profile } from "./pages/Profile/Profile";
+import { Home } from "./pages/Home/Home";
 
 export default function App() {
   const { isLoggedIn } = useSelector((state) => state.user);
@@ -65,6 +66,9 @@ export default function App() {
               <Route path="/profile" Component={Profile} />
             </>
           )}
+
+          {/* Public Routes */}
+          <Route path="/" Component={Home} />
           {!isLoggedIn && (
             <>
               {/* Auth Routes */}
