@@ -12,6 +12,7 @@ import { setUser } from "./store/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ForgotPassword } from "./pages/ForgotPassword/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword/ResetPassword";
+import { Profile } from "./pages/Profile/Profile";
 
 export default function App() {
   const { isLoggedIn } = useSelector((state) => state.user);
@@ -58,6 +59,12 @@ export default function App() {
       {/* Routes */}
       <Container className="my-3 py-3">
         <Routes>
+          {isLoggedIn && (
+            <>
+              {/* Profile Routes */}
+              <Route path="/profile" Component={Profile} />
+            </>
+          )}
           {!isLoggedIn && (
             <>
               {/* Auth Routes */}

@@ -48,6 +48,13 @@ export const Navbar = () => {
               </>
             )}
 
+            {/* Profile */}
+            {isLoggedIn && (
+              <Nav.Link as={Link} to="/profile">
+                Profile
+              </Nav.Link>
+            )}
+
             {/* Show Logout */}
             {isLoggedIn && (
               <Button variant="outline-danger" onClick={handleLogout}>

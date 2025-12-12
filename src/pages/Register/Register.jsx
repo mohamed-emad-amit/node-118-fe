@@ -18,6 +18,7 @@ export const Register = () => {
   const go = useNavigate();
 
   // Refs
+  const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
 
@@ -30,6 +31,7 @@ export const Register = () => {
     try {
       // Data
       const data = {
+        name: nameRef.current.value,
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
@@ -62,6 +64,19 @@ export const Register = () => {
       <h1>Register</h1>
 
       <Form onSubmit={handleRegister}>
+        {/* Add Name For Profile Updates */}
+        <Form.Group className="mb-4">
+          <Form.Label htmlFor="name">Username</Form.Label>
+
+          <Form.Control
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Type Fullname"
+            ref={nameRef}
+          />
+        </Form.Group>
+
         <Form.Group className="mb-4">
           <Form.Label htmlFor="email">Email</Form.Label>
 
