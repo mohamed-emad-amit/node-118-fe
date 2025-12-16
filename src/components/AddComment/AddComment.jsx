@@ -4,7 +4,7 @@ import { errorHandler } from "../../utils/errorHandler";
 import { api } from "../../apis/api";
 import toast from "react-hot-toast";
 
-export const AddComment = ({ post }) => {
+export const AddComment = ({ post, onAppend }) => {
   const [text, setText] = useState("");
 
   const isDisabled = !text.trim();
@@ -16,9 +16,15 @@ export const AddComment = ({ post }) => {
       // Hit Endpoint -> data text postId -> token
       const data = { text, postId: post._id };
       const response = await api.post("/api/v1/comments", data);
+      // Extract Info
       const { comment, message } = response.data;
 
+      // Call onAppend -> Append Comment
+      onAppend(comment);
+
+      // Reset Text
       setText("");
+      // Show Toast
       toast.success(message);
     } catch (error) {
       console.log(error);

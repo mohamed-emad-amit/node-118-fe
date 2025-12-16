@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { errorHandler } from "../../utils/errorHandler";
 import { api } from "../../apis/api";
 import { CommentItem } from "../CommentItem/CommentItem";
+import { AddComment } from "../AddComment/AddComment";
 
 export const CommentList = ({ post }) => {
   // State
@@ -27,8 +28,21 @@ export const CommentList = ({ post }) => {
 
   return (
     <div>
+      <AddComment
+        post={post}
+        onAppend={(comment) => {
+          setComments([...comments, comment]);
+        }}
+      />
+
       {comments.map((comment) => (
-        <CommentItem key={comment._id} comment={comment} />
+        <CommentItem
+          key={comment._id}
+          comment={comment}
+          onDelete={() => {
+            setComments(comments.filter((c) => c._id !== comment._id));
+          }}
+        />
       ))}
     </div>
   );

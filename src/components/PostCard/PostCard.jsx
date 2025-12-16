@@ -57,7 +57,6 @@ export const PostCard = ({ post }) => {
       <div>
         <Button onClick={handleLike}>Like {currentPost.likes.length}</Button>
 
-        <AddComment post={currentPost} />
         <CommentList post={currentPost} />
       </div>
     </div>
